@@ -38,10 +38,16 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ bookings });
   } catch (error: any) {
-    if (error.message?.includes('Forbidden')) {
+    if (error.message?.includes('Forbidden') || error.message?.includes('Admin access required')) {
       return NextResponse.json(
         { error: 'Forbidden' },
         { status: 403 }
+      );
+    }
+    if (error.message?.includes('Unauthorized')) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
       );
     }
     console.error('Admin bookings API error:', error);
